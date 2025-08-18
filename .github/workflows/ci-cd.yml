@@ -7,3 +7,18 @@ on:
   pull_request:
     branches:
       - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+
+      - name: Build wazuh images
+        run: |
+          chmod +x build-docker-images/build-images.sh
+          ./build-docker-images/build-images.sh
+
