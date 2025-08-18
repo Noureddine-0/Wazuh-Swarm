@@ -9,18 +9,20 @@ on:
       - main
 
 jobs:
-  scan:
+  build:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Pull official Wazuh images
+      - name: Install docker-compose
+        run: sudo apt-get update && sudo apt-get install -y docker-compose
+
+      - name: Build wazuh images
         run: |
-          docker pull wazuh/wazuh-manager:4.12.0
-          docker pull wazuh/wazuh-indexer:4.12.0
-          docker pull wazuh/wazuh-dashboard:4.12.0
+          chmod +x build-docker-images/build-images.sh
+          ./build-docker-images/build-images.sh
 
       - name: Scan Wazuh Manager image with Trivy
         uses: aquasecurity/trivy-action@0.20.0
