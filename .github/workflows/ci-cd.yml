@@ -19,6 +19,7 @@ jobs:
 
       - name: Build wazuh images
         run: |
+          sudo apt install docker-compose
           chmod +x build-docker-images/build-images.sh
           ./build-docker-images/build-images.sh
 
