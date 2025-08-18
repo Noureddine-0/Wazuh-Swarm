@@ -23,6 +23,9 @@ RUN source /check_repository.sh
 
 RUN yum install wazuh-manager-${WAZUH_VERSION}-${WAZUH_TAG_REVISION} -y && \
     yum clean all && \
+    # Remove Go to reduce vulnerabilities
+    yum remove -y golang || true && \
+    rm -rf /usr/local/go /usr/bin/go /usr/lib/golang /usr/share/golang || true && \
     chmod 775 /filebeat_module.sh && \
     source /filebeat_module.sh && \
     rm /filebeat_module.sh && \
@@ -45,8 +48,7 @@ RUN chmod go-w /etc/filebeat/wazuh-template.json
 # Prepare permanent data
 # Sync calls are due to https://github.com/docker/docker/issues/9547
 
-#Make mount directories for keep permissions
-
+# Make mount directories for keep permissions
 RUN mkdir -p /var/ossec/var/multigroups && \
     chown root:wazuh /var/ossec/var/multigroups && \
     chmod 770 /var/ossec/var/multigroups && \
