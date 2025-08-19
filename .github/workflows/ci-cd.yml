@@ -30,6 +30,7 @@ jobs:
           docker stack deploy -c stack.yml wazuh
           echo "Waiting for Wazuh services to be healthy..."
           until curl -k -s https://localhost:443/api >/dev/null; do
+            docker service ls
             echo "Waiting for Wazuh dashboard..."
             sleep 10
           done
