@@ -26,6 +26,7 @@ jobs:
 
       - name: Deplo Wazuh stack
         run: |
+          docker swarm init
           docker stack deploy -c stack.yml wazuh
           echo "Waiting for Wazuh services to be healthy..."
           until curl -k -s https://localhost:443/api >/dev/null; do
