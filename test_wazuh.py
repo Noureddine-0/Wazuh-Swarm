@@ -1,7 +1,13 @@
+import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+
+# Get Wazuh Dashboard IP from environment variable
+runner_ip = os.getenv("RUNNER_IP")
+if not runner_ip:
+    raise ValueError("RUNNER_IP environment variable is not set")
 
 # Start browser (headless mode so no GUI needed)
 options = webdriver.ChromeOptions()
@@ -11,7 +17,8 @@ options.add_argument("--allow-insecure-localhost")
 driver = webdriver.Chrome(options=options)
 
 try:
-    driver.get("https://192.168.24.101:443/app/login?")  # adjust to your Wazuh Dashboard address
+    url = f"https://{runner_ip}:443/app/login?"
+    driver.get(url)
     print("Page title is:", driver.title)
 
     # Create WebDriverWait object

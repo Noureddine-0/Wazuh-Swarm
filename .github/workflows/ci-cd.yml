@@ -24,7 +24,7 @@ jobs:
           chmod +x build-docker-images/build-images.sh
           ./build-docker-images/build-images.sh
 
-  deploy:
+  deploy-test:
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
@@ -62,16 +62,6 @@ jobs:
           done
         shell: bash
 
-  test:
-    needs: deploy
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      
-
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
@@ -79,9 +69,18 @@ jobs:
 
       - name: pip install selenium webdriver-manager
         run: |
-          python -m pip install --upgrade pip
+          python3 -m pip install --upgrade pip
           pip install selenium webdriver-manager
 
       - name: Run Wazuh dashboard Selenium test
         run: python3 test_wazuh.py
+
+
+      
+
+      
+
+      
+
+      
 

@@ -13,13 +13,3 @@
 
     - name: Deploy Wazuh stack
       shell: docker stack deploy -c stack.yml wazuh
-
-    - name: Wait for Wazuh Dashboard to be ready
-      ansible.builtin.shell: |
-        echo "Waiting for Wazuh services to be healthy..."
-        until curl -k -s https://127.0.0.1:443/api >/dev/null; do
-              
-          echo "Waiting for Wazuh Dashboard..."
-          sleep 10
-        done
-        echo "Wazuh stack is ready"
