@@ -23,5 +23,3 @@
           sleep 10
         done
         echo "Wazuh stack is ready"
-      args:
-        warn: false
