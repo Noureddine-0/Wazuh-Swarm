@@ -52,7 +52,8 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-
+      - name: simple test
+        run: curl -k -s https://127.0.0.1:443/app/login?
       - name: pip install selenium webdriver-manager
         run: |
           python -m pip install --upgrade pip
