@@ -6,22 +6,16 @@
 
   tasks:
     - name: Initialize Docker swarm
-      shell: docker swarm init --advertise-addr 127.0.0.1 || true
-      args:
-        warn: false
+      ansible.builtin.shell: docker swarm init --advertise-addr 127.0.0.1 || true
 
     - name: Remove old Wazuh stack
-      shell: docker stack rm wazuh || true
-      args:
-        warn: false
+      ansible.builtin.shell: docker stack rm wazuh || true
 
     - name: Deploy Wazuh stack
       shell: docker stack deploy -c stack.yml wazuh
-      args:
-        warn: false
 
     - name: Wait for Wazuh Dashboard to be ready
-      shell: |
+      ansible.builtin.shell: |
         echo "Waiting for Wazuh services to be healthy..."
         until curl -k -s https://127.0.0.1:443/api >/dev/null; do
           docker service ps wazuh_wazuh-dashboard --no-trunc
