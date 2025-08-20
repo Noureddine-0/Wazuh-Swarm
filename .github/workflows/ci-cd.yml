@@ -24,14 +24,17 @@ jobs:
           chmod +x build-docker-images/build-images.sh
           ./build-docker-images/build-images.sh
 
-      - name: Deplo Wazuh stack
-        run: |
-          docker swarm init --advertise-addr 127.0.0.1
-          docker stack deploy -c stack.yml wazuh
-          echo "Waiting for Wazuh services to be healthy..."
-          until curl -k -s https://127.0.0.1:443/api >/dev/null; do
-            docker service ps wazuh_wazuh-dashboard --no-trunc
-            echo "Waiting for Wazuh dashboard..."
-            sleep 10
-          done
-          echo "Wazuh stack is ready"
+  deploy:
+    needs: build
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Deploy to docker swarm via Ansible
+        uses: ansible/ansible-runner-action@v1
+        with:
+          playbook: deploy-wazuh.yml
