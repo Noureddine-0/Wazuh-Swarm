@@ -53,11 +53,10 @@ jobs:
         with:
           python-version: '3.x'
 
-      - name: Install dependencies
+      - name: pip install selenium webdriver-manager
         run: |
-          sudo apt-get update
-          sudo apt-get install -y chromium-browser chromium-chromedriver python3-pip
-          pip install selenium
+          python -m pip install --upgrade pip
+          pip install selenium webdriver-manager
 
       - name: Run Wazuh dashboard Selenium test
         run: python3 test_wazuh.py
