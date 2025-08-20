@@ -51,13 +51,17 @@ jobs:
         run: |
           echo "Waiting for Wazuh dashboard at https://$RUNNER_IP:443/app/login..."
           SLEEP_TIME=10
-          while ! curl -k -s https://$RUNNER_IP:443/app/login >/dev/null; do
+          while true; do
+            RESPONSE=$(curl -k -s https://$RUNNER_IP:443/app/login)
+            if [[ "$RESPONSE" != *"Wazuh dashboard server is not ready yet"* ]]; then
+              echo "Wazuh dashboard is ready!"
+              break
+            fi
             echo "Dashboard not ready yet, waiting $SLEEP_TIME seconds..."
             sleep $SLEEP_TIME
           done
-          echo "Wazuh dashboard is ready!"
         shell: bash
-        
+
   test:
     needs: deploy
     runs-on: ubuntu-latest
