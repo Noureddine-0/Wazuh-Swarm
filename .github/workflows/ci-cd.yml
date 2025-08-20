@@ -16,13 +16,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get runner IP
-        run: |
-          RUNNER_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-          echo "Runner IP is: $RUNNER_IP"
-          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
-        shell: bash
-
       - name: Install docker-compose
         run: sudo apt-get update && sudo apt-get install -y docker-compose
 
@@ -55,6 +48,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Get runner IP
+        run: |
+          RUNNER_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+          echo "Runner IP is: $RUNNER_IP"
+          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
+        shell: bash
+        
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
