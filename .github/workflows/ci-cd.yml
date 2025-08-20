@@ -60,7 +60,7 @@ jobs:
         with:
           python-version: '3.x'
       - name: simple test
-        run: curl -k -s https://127.0.0.1:443/app/login?
+        run: curl -k -s https://$RUNNER_IP:443/app/login?
       - name: pip install selenium webdriver-manager
         run: |
           python -m pip install --upgrade pip
