@@ -34,7 +34,8 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install Ansible
+        run: sudo apt-get update && sudo apt-get install -y ansible
+
       - name: Deploy to docker swarm via Ansible
-        uses: ansible/ansible-runner-action@v1
-        with:
-          playbook: deploy-wazuh.yml
+        run: ansible-playbook deploy-wazuh.yml
