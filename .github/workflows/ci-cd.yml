@@ -28,7 +28,10 @@ jobs:
     needs: build
     if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
-
+    env:
+      WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
+      WAZUH_INDEXER_PASSWORD: ${{ secrets.WAZUH_INDEXER_PASSWORD }}
+      WAZUH_DASHBOARD_PASSWORD: ${{ secrets.WAZUH_DASHBOARD_PASSWORD }}
 
     steps:
       - name: Checkout repository
@@ -40,11 +43,7 @@ jobs:
           echo "Runner IP is: $RUNNER_IP"
           echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
         shell: bash
-      - name: Create Docker secrets
-        run: |
-          echo "${{ secrets.WAZUH_API_PASSWORD }}" | docker secret create wazuh_api_password -
-          echo "${{ secrets.WAZUH_INDEXER_PASSWORD }}" | docker secret create wazuh_indexer_password -
-          echo "${{ secrets.WAZUH_DASHBOARD_PASSWORD }}" | docker secret create wazuh_dashboard_password -
+
       - name: Install Ansible
         run: sudo apt-get update && sudo apt-get install -y ansible
 
