@@ -34,11 +34,21 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Get runner IP
+        run: |
+          RUNNER_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+          echo "Runner IP is: $RUNNER_IP"
+          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
+        shell: bash
+
       - name: Install Ansible
         run: sudo apt-get update && sudo apt-get install -y ansible
 
       - name: Deploy to docker swarm via Ansible
         run: ansible-playbook deploy-wazuh.yml
+
+      - name: simple test
+        run: curl -k -s https://$RUNNER_IP:443/app/login
 
   test:
     needs: deploy
@@ -48,19 +58,13 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Get runner IP
-        run: |
-          RUNNER_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-          echo "Runner IP is: $RUNNER_IP"
-          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
-        shell: bash
-        
+      
+
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.x'
-      - name: simple test
-        run: curl -k -s https://$RUNNER_IP:443/app/login
+          
       - name: pip install selenium webdriver-manager
         run: |
           python -m pip install --upgrade pip
