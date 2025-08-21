@@ -13,7 +13,7 @@
       ansible.builtin.shell: docker swarm init --advertise-addr 127.0.0.1 || true
 
     - name: Check if wazuh_api_password secret exists
-      ansible.builtin.shell: sudo docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_api_password
+      ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_api_password
       register: api_secret_check
       ignore_errors: true
 
@@ -23,7 +23,7 @@
       when: api_secret_check.rc != 0
 
     - name: Check if wazuh_indexer_password secret exists
-      ansible.builtin.shell: sudo docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_indexer_password
+      ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_indexer_password
       register: indexer_secret_check
       ignore_errors: true
 
@@ -33,7 +33,7 @@
       when: indexer_secret_check.rc != 0
 
     - name: Check if wazuh_dashboard_password secret exists
-      ansible.builtin.shell: sudo docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_dashboard_password
+      ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_dashboard_password
       register: dashboard_secret_check
       ignore_errors: true
 
