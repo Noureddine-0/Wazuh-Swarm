@@ -24,7 +24,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install docker-compose
-        if: matrix.runner == 'ubuntu-latest'
+        if:  ${{ matrix.runner == 'ubuntu-latest' }}
         run: sudo apt-get update && sudo apt-get install -y docker-compose
 
       - name: Build wazuh images
@@ -53,7 +53,7 @@ jobs:
         shell: bash
 
       - name: Install Ansible
-        if: matrix.runner == ubuntu-latest
+        if:  ${{ matrix.runner == 'ubuntu-latest' }}
         run: sudo apt-get update && sudo apt-get install -y ansible
 
       - name: Deploy to docker swarm via Ansible
