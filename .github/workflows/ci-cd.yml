@@ -11,7 +11,10 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-
+    env:
+      WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
+      WAZUH_INDEXER_PASSWORD: ${{ secrets.WAZUH_INDEXER_PASSWORD }}
+      WAZUH_DASHBOARD_PASSWORD: ${{ secrets.WAZUH_DASHBOARD_PASSWORD }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
