@@ -9,33 +9,51 @@ on:
       - main
 
 jobs:
-  github-ci:
-    runs-on: ubuntu-latest
+  build:
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner: [ubuntu-latest, self-hosted]
     env:
       WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
       WAZUH_INDEXER_PASSWORD: ${{ secrets.WAZUH_INDEXER_PASSWORD }}
       WAZUH_DASHBOARD_PASSWORD: ${{ secrets.WAZUH_DASHBOARD_PASSWORD }}
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
 
       - name: Install docker-compose
+        if: matrix.runner == 'ubuntu-latest'
         run: sudo apt-get update && sudo apt-get install -y docker-compose
-
-      - name: Get runner IP
-        run: |
-          RUNNER_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-          echo "Runner IP is: $RUNNER_IP"
-          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
-        shell: bash
 
       - name: Build wazuh images
         run: |
           chmod +x build-docker-images/build-images.sh
           ./build-docker-images/build-images.sh
 
+  deploy-test:
+    needs: build
+    runs-on: ${{ matrix.runner }}
+    strategy:
+      matrix:
+        runner: [ubuntu-latest, self-hosted]
+    env:
+      WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
+      WAZUH_INDEXER_PASSWORD: ${{ secrets.WAZUH_INDEXER_PASSWORD }}
+      WAZUH_DASHBOARD_PASSWORD: ${{ secrets.WAZUH_DASHBOARD_PASSWORD }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get runner IP
+        run: |
+          RUNNER_IP=$(ip route get 1.1.1.1 | awk '{for(i=1;i<=NF;i++){if($i=="src"){print $(i+1)}}}')
+        shell: bash
 
       - name: Install Ansible
+        if: matrix.runner == ubuntu-latest
         run: sudo apt-get update && sudo apt-get install -y ansible
 
       - name: Deploy to docker swarm via Ansible
@@ -68,48 +86,6 @@ jobs:
 
       - name: Run Wazuh dashboard Selenium test
         run: python3 test_wazuh.py
-
-  selfhosted-ci:
-    runs-on: self-hosted
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Get runner IP
-        run: |
-          RUNNER_IP=$(ip -4 addr show ens34 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
-          echo "Runner IP is: $RUNNER_IP"
-          echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
-        shell: bash
-
-      - name: Build wazuh images
-        run: |
-          chmod +x build-docker-images/build-images.sh
-          ./build-docker-images/build-images.sh
-
-      - name: Deploy to docker swarm via Ansible
-        run: ansible-playbook deploy-wazuh.yml
-
-      - name: simple test
-        run: |
-          echo "Waiting for Wazuh dashboard at https://$RUNNER_IP:443/app/login..."
-          SLEEP_TIME=10
-          while true; do
-            RESPONSE=$(curl -k -s https://$RUNNER_IP:443/app/login)
-            if [[ "$RESPONSE" != *"Wazuh dashboard server is not ready yet"* ]]; then
-              echo "Wazuh dashboard is ready!"
-              break
-            fi
-            echo "Dashboard not ready yet, waiting $SLEEP_TIME seconds..."
-            sleep $SLEEP_TIME
-          done
-        shell: bash
-
-      - name: Run Wazuh dashboard Selenium test
-        run: python3 test_wazuh.py
-
-
-
 
 
       
