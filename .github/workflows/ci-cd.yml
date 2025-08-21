@@ -77,7 +77,7 @@ jobs:
 
       - name: Get runner IP
         run: |
-          RUNNER_IP=$(ip -4 addr show eth0 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
+          RUNNER_IP=$(ip -4 addr show ens34 | grep -oP '(?<=inet\s)\d+(\.\d+){3}')
           echo "Runner IP is: $RUNNER_IP"
           echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
         shell: bash
