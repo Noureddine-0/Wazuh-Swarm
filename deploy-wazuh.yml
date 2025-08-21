@@ -12,6 +12,12 @@
     - name: Initialize Docker swarm
       ansible.builtin.shell: docker swarm init --advertise-addr 127.0.0.1 || true
 
+    - name: Ensure overlay network exists
+      ansible.builtin.shell: |
+        if ! docker network ls | grep -q '^wazuh_default'; then
+          docker network create --driver overlay --attachable wazuh_default
+        fi
+
     - name: Check if wazuh_api_password secret exists
       ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_api_password
       register: api_secret_check
@@ -33,7 +39,7 @@
       when: indexer_secret_check.rc != 0
 
     - name: Check if wazuh_dashboard_password secret exists
-      ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_dashboard_password
+      ansible.builtin.shell:  docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_dashboard_password
       register: dashboard_secret_check
       ignore_errors: true
 
