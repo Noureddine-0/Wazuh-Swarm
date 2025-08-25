@@ -20,13 +20,13 @@ services:
     environment:
       - INDEXER_URL=https://wazuh1.indexer:9200
       - INDEXER_USERNAME=admin
-      - INDEXER_PASSWORD_FILE=/run/secrets/wazuh_indexer_password
+      - INDEXER_PASSWORD=${WAZUH_INDEXER_PASSWORD}
       - FILEBEAT_SSL_VERIFICATION_MODE=full
       - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/root-ca.pem
       - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
       - SSL_KEY=/etc/ssl/filebeat.key
       - API_USERNAME=wazuh-wui
-      - API_PASSWORD_PASSWORD=/run/secrets/wazuh_api_password
+      - API_PASSWORD=${WAZUH_API_PASSWORD}
     volumes:
       - master-wazuh-api-configuration:/var/ossec/api/configuration
       - master-wazuh-etc:/var/ossec/etc
@@ -44,6 +44,7 @@ services:
       - ./certs/wazuh.master-key.pem:/etc/ssl/filebeat.key
       - ./config/wazuh_cluster/wazuh_manager.conf:/wazuh-config-mount/etc/ossec.conf
 
+
   wazuh-worker:
     networks:
       - wazuh_default
@@ -52,7 +53,7 @@ services:
     environment:
       - INDEXER_URL=https://wazuh1.indexer:9200
       - INDEXER_USERNAME=admin
-      - INDEXER_PASSWORD_FILE=/run/secrets/wazuh_indexer_password
+      - INDEXER_PASSWORD=${WAZUH_INDEXER_PASSWORD}
       - FILEBEAT_SSL_VERIFICATION_MODE=full
       - SSL_CERTIFICATE_AUTHORITIES=/etc/ssl/root-ca.pem
       - SSL_CERTIFICATE=/etc/ssl/filebeat.pem
@@ -109,9 +110,9 @@ services:
       - OPENSEARCH_HOSTS="https://wazuh1.indexer:9200"
       - WAZUH_API_URL="https://wazuh.master"
       - API_USERNAME=wazuh-wui
-      - API_PASSWORD_FILE=/run/secrets/wazuh_api_password
+      - API_PASSWORD=${WAZUH_API_PASSWORD}
       - DASHBOARD_USERNAME=kibanaserver
-      - DASHBOARD_PASSWORD_FILE=/run/secrets/wazuh_dashboard_password
+      - DASHBOARD_PASSWORD=${WAZUH_DASHBOARD_PASSWORD}
     volumes:
       - ./certs/wazuh.dashboard.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard.pem
       - ./certs/wazuh.dashboard-key.pem:/usr/share/wazuh-dashboard/certs/wazuh-dashboard-key.pem
@@ -149,11 +150,3 @@ volumes:
   master-wazuh-api-configuration:
   master-wazuh-etc:
   wazuh-indexer-data-1:
-
-secrets:
-  wazuh_indexer_password:
-    external: true
-  wazuh_api_password:
-    external: true
-  wazuh_dashboard_password:
-    external: true

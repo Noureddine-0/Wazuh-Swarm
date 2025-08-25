@@ -11,37 +11,7 @@
   tasks:
     - name: Initialize Docker swarm
       ansible.builtin.shell: docker swarm init --advertise-addr 127.0.0.1 || true
-
-    - name: Check if wazuh_api_password secret exists
-      ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_api_password
-      register: api_secret_check
-      ignore_errors: true
-
-    - name: Create wazuh_api_password secret
-      ansible.builtin.shell: |
-        echo  "{{ wazuh_api_password }}" | docker secret create wazuh_api_password -
-      when: api_secret_check.rc != 0
-
-    - name: Check if wazuh_indexer_password secret exists
-      ansible.builtin.shell: docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_indexer_password
-      register: indexer_secret_check
-      ignore_errors: true
-
-    - name: Create wazuh_indexer_password secret
-      ansible.builtin.shell: |
-        echo  "{{ wazuh_indexer_password }}" | docker secret create wazuh_indexer_password -
-      when: indexer_secret_check.rc != 0
-
-    - name: Check if wazuh_dashboard_password secret exists
-      ansible.builtin.shell:  docker secret ls --format '{{ "{{.Name}}" }}' | grep -w wazuh_dashboard_password
-      register: dashboard_secret_check
-      ignore_errors: true
-
-    - name: Create wazuh_dashboard_password secret
-      ansible.builtin.shell: |
-        echo  "{{ wazuh_dashboard_password }}" | docker secret create wazuh_dashboard_password -
-      when: dashboard_secret_check.rc != 0
-
+      
     - name: Remove old Wazuh stack if it exists
       ansible.builtin.shell: docker stack rm wazuh || true
 
