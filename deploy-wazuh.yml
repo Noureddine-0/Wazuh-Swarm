@@ -1,4 +1,3 @@
----
 - name: Deploy Wazuh stack via Ansible
   hosts: localhost
   connection: local
@@ -28,20 +27,20 @@
 
     - name: Create Docker swarm secrets
       ansible.builtin.shell: |
-        echo "$ROOT_CA_CERT"        | base64 -d | docker secret create root-ca.pem - || true
-        echo "$ROOT_CA_KEY"         | base64 -d | docker secret create root-ca.key - || true
-        echo "$ROOT_CA_MANAGER_CERT"| base64 -d | docker secret create root-ca-manager.pem - || true
-        echo "$ROOT_CA_MANAGER_KEY" | base64 -d | docker secret create root-ca-manager.key - || true
-        echo "$ADMIN_CERT"          | base64 -d | docker secret create admin.pem - || true
-        echo "$ADMIN_KEY"           | base64 -d | docker secret create admin-key.pem - || true
-        echo "$INDEXER_CERT"        | base64 -d | docker secret create wazuh1.indexer.pem - || true
-        echo "$INDEXER_KEY"         | base64 -d | docker secret create wazuh1.indexer-key.pem - || true
-        echo "$MASTER_CERT"         | base64 -d | docker secret create wazuh.master.pem - || true
-        echo "$MASTER_KEY"          | base64 -d | docker secret create wazuh.master-key.pem - || true
-        echo "$WORKER_CERT"         | base64 -d | docker secret create wazuh.worker.pem - || true
-        echo "$WORKER_KEY"          | base64 -d | docker secret create wazuh.worker-key.pem - || true
-        echo "$DASHBOARD_CERT"      | base64 -d | docker secret create wazuh.dashboard.pem - || true
-        echo "$DASHBOARD_KEY"       | base64 -d | docker secret create wazuh.dashboard-key.pem - || true
+        echo "{{ root_ca_cert }}"        | base64 -d | docker secret create root-ca.pem -
+        echo "{{ root_ca_key }}"         | base64 -d | docker secret create root-ca.key -
+        echo "{{ root_ca_manager_cert }}"| base64 -d | docker secret create root-ca-manager.pem -
+        echo "{{ root_ca_manager_key }}" | base64 -d | docker secret create root-ca-manager.key -
+        echo "{{ admin_cert }}"          | base64 -d | docker secret create admin.pem -
+        echo "{{ admin_key }}"           | base64 -d | docker secret create admin-key.pem -
+        echo "{{ indexer_cert }}"        | base64 -d | docker secret create wazuh1.indexer.pem -
+        echo "{{ indexer_key }}"         | base64 -d | docker secret create wazuh1.indexer-key.pem -
+        echo "{{ master_cert }}"         | base64 -d | docker secret create wazuh.master.pem -
+        echo "{{ master_key }}"          | base64 -d | docker secret create wazuh.master-key.pem -
+        echo "{{ worker_cert }}"         | base64 -d | docker secret create wazuh.worker.pem -
+        echo "{{ worker_key }}"          | base64 -d | docker secret create wazuh.worker-key.pem -
+        echo "{{ dashboard_cert }}"      | base64 -d | docker secret create wazuh.dashboard.pem -
+        echo "{{ dashboard_key }}"       | base64 -d | docker secret create wazuh.dashboard-key.pem -
 
     - name: Remove old Wazuh stack if it exists
       ansible.builtin.shell: docker stack rm wazuh || true
