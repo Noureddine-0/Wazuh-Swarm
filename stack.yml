@@ -58,7 +58,7 @@ services:
     secrets:
       - source: root-ca-manager.pem
         target: /etc/ssl/root-ca.pem
-       source: wazuh.worker.pem
+      - source: wazuh.worker.pem
         target: /etc/ssl/filebeat.pem
       - source: wazuh.worker-key.pem
         target: /etc/ssl/filebeat.key
@@ -184,7 +184,7 @@ secrets:
     external: true
   root-ca.pem:
     external: true
-   wazuh1.indexer-key.pem:
+  wazuh1.indexer-key.pem:
     external: true
   wazuh1.indexer.pem:
     external: true
