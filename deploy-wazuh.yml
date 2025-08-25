@@ -48,6 +48,15 @@
       ansible.builtin.debug:
         var: secret_creation.stdout_lines
 
+    - name: Debug
+      ansible.builtin.shell: docker secret ls
+      register: debugsecret
+      ignore_errors: yes
+
+    - name: show debug
+      ansible.builtin.debug:
+        var: debugsecret.stdout_lines
+
     - name: Remove old Wazuh stack if it exists
       ansible.builtin.shell: docker stack rm wazuh || true
 
