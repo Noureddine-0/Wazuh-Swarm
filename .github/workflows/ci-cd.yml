@@ -39,9 +39,24 @@ jobs:
       matrix:
         runner: [ubuntu-latest, self-hosted]
     env:
+
       WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
       WAZUH_INDEXER_PASSWORD: ${{ secrets.WAZUH_INDEXER_PASSWORD }}
       WAZUH_DASHBOARD_PASSWORD: ${{ secrets.WAZUH_DASHBOARD_PASSWORD }}
+      ADMIN_CERT: ${{ secrets.ADMIN_CERT }}
+      ADMIN_KEY: ${{ secrets.ADMIN_KEY }}
+      DASHBOARD_CERT: ${{ secrets.DASHBOARD_CERT }}
+      DASHBOARD_KEY: ${{ secrets.DASHBOARD_KEY }}
+      INDEXER_CERT: ${{ secrets.INDEXER_CERT }}
+      INDEXER_KEY: ${{ secrets.INDEXER_KEY }}
+      MASTER_CERT: ${{ secrets.MASTER_CERT }}
+      MASTER_KEY: ${{ secrets.MASTER_KEY }}
+      WORKER_CERT: ${{ secrets.WORKER_CERT }}
+      WORKER_KEY: ${{ secrets.WORKER_KEY }}
+      ROOT_CA_CERT: ${{ secrets.ROOT_CA_CERT }}
+      ROOT_CA_KEY: ${{ secrets.ROOT_CA_KEY }}
+      ROOT_CA_MANAGER_CERT: ${{ secrets.ROOT_CA_MANAGER_CERT }}
+      ROOT_CA_MANAGER_KEY: ${{ secrets.ROOT_CA_MANAGER_KEY }}
 
     steps:
       - name: Checkout repository
@@ -53,6 +68,24 @@ jobs:
           echo "Runner IP is: $RUNNER_IP"
           echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
         shell: bash
+
+      - name: Create Docker swarm secrets
+        run: |
+          echo "$ROOT_CA_CERT"        | base64 -d | docker secret create root-ca.pem -        || true
+          echo "$ROOT_CA_KEY"         | base64 -d | docker secret create root-ca.key -        || true
+          echo "$ROOT_CA_MANAGER_CERT"| base64 -d | docker secret create root-ca-manager.pem -|| true
+          echo "$ROOT_CA_MANAGER_KEY" | base64 -d | docker secret create root-ca-manager.key -|| true
+          echo "$ADMIN_CERT"          | base64 -d | docker secret create admin.pem -          || true
+          echo "$ADMIN_KEY"           | base64 -d | docker secret create admin-key.pem -      || true
+          echo "$INDEXER_CERT"        | base64 -d | docker secret create wazuh1.indexer.pem - || true
+          echo "$INDEXER_KEY"         | base64 -d | docker secret create wazuh1.indexer-key.pem - || true
+          echo "$MASTER_CERT"         | base64 -d | docker secret create wazuh.master.pem -   || true
+          echo "$MASTER_KEY"          | base64 -d | docker secret create wazuh.master-key.pem - || true
+          echo "$WORKER_CERT"         | base64 -d | docker secret create wazuh.worker.pem -   || true
+          echo "$WORKER_KEY"          | base64 -d | docker secret create wazuh.worker-key.pem - || true
+          echo "$DAHBOARD_CERT"       | base64 -d | docker secret create wazuh.dashboard.pem -|| true
+          echo "$DASHBOARD_KEY"       | base64 -d | docker secret create wazuh.dashboard-key.pem - || true
+
 
       - name: Install Ansible
         if:  ${{ matrix.runner == 'ubuntu-latest' }}
@@ -93,13 +126,4 @@ jobs:
         run: |
           source selenium-env/bin/activate
           python3 test_wazuh.py
-
-
-      
-
-      
-
-      
-
-      
 
