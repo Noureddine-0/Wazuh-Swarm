@@ -41,6 +41,12 @@
         echo "{{ worker_key }}"          | base64 -d | docker secret create wazuh.worker-key.pem -
         echo "{{ dashboard_cert }}"      | base64 -d | docker secret create wazuh.dashboard.pem -
         echo "{{ dashboard_key }}"       | base64 -d | docker secret create wazuh.dashboard-key.pem -
+      register: secret_creation
+        ignore_errors: yes
+
+    - name: Show secret creation output
+      ansible.builtin.debug:
+        var: secret_creation.stdout_lines
 
     - name: Remove old Wazuh stack if it exists
       ansible.builtin.shell: docker stack rm wazuh || true
