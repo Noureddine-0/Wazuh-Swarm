@@ -13,7 +13,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        runner: [ubuntu-latest, self-hosted]
+        runner: [ubuntu-latest]
     env:
       WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
       WAZUH_INDEXER_PASSWORD: ${{ secrets.WAZUH_INDEXER_PASSWORD }}
@@ -37,7 +37,7 @@ jobs:
     runs-on: ${{ matrix.runner }}
     strategy:
       matrix:
-        runner: [ubuntu-latest, self-hosted]
+        runner: [ubuntu-latest]
     env:
 
       WAZUH_API_PASSWORD: ${{ secrets.WAZUH_API_PASSWORD }}
