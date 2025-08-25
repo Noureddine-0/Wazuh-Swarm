@@ -69,24 +69,6 @@ jobs:
           echo "RUNNER_IP=$RUNNER_IP" >> $GITHUB_ENV
         shell: bash
 
-      - name: Create Docker swarm secrets
-        run: |
-          echo "$ROOT_CA_CERT"        | base64 -d | docker secret create root-ca.pem -        || true
-          echo "$ROOT_CA_KEY"         | base64 -d | docker secret create root-ca.key -        || true
-          echo "$ROOT_CA_MANAGER_CERT"| base64 -d | docker secret create root-ca-manager.pem -|| true
-          echo "$ROOT_CA_MANAGER_KEY" | base64 -d | docker secret create root-ca-manager.key -|| true
-          echo "$ADMIN_CERT"          | base64 -d | docker secret create admin.pem -          || true
-          echo "$ADMIN_KEY"           | base64 -d | docker secret create admin-key.pem -      || true
-          echo "$INDEXER_CERT"        | base64 -d | docker secret create wazuh1.indexer.pem - || true
-          echo "$INDEXER_KEY"         | base64 -d | docker secret create wazuh1.indexer-key.pem - || true
-          echo "$MASTER_CERT"         | base64 -d | docker secret create wazuh.master.pem -   || true
-          echo "$MASTER_KEY"          | base64 -d | docker secret create wazuh.master-key.pem - || true
-          echo "$WORKER_CERT"         | base64 -d | docker secret create wazuh.worker.pem -   || true
-          echo "$WORKER_KEY"          | base64 -d | docker secret create wazuh.worker-key.pem - || true
-          echo "$DAHBOARD_CERT"       | base64 -d | docker secret create wazuh.dashboard.pem -|| true
-          echo "$DASHBOARD_KEY"       | base64 -d | docker secret create wazuh.dashboard-key.pem - || true
-
-
       - name: Install Ansible
         if:  ${{ matrix.runner == 'ubuntu-latest' }}
         run: sudo apt-get update && sudo apt-get install -y ansible
@@ -94,7 +76,7 @@ jobs:
       - name: Deploy to docker swarm via Ansible
         run: ansible-playbook deploy-wazuh.yml
 
-      - name: simple test
+      - name: Waiting for Wazuh Dashboard to be ready
         run: |
           echo "Waiting for Wazuh dashboard at https://$RUNNER_IP:443/app/login..."
           SLEEP_TIME=10

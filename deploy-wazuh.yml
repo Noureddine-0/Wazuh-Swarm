@@ -7,11 +7,42 @@
     wazuh_api_password: "{{ lookup('env', 'WAZUH_API_PASSWORD') }}"
     wazuh_indexer_password: "{{ lookup('env', 'WAZUH_INDEXER_PASSWORD') }}"
     wazuh_dashboard_password: "{{ lookup('env', 'WAZUH_DASHBOARD_PASSWORD') }}"
+    root_ca_cert: "{{ lookup('env', 'ROOT_CA_CERT') }}"
+    root_ca_key: "{{ lookup('env', 'ROOT_CA_KEY') }}"
+    root_ca_manager_cert: "{{ lookup('env', 'ROOT_CA_MANAGER_CERT') }}"
+    root_ca_manager_key: "{{ lookup('env', 'ROOT_CA_MANAGER_KEY') }}"
+    admin_cert: "{{ lookup('env', 'ADMIN_CERT') }}"
+    admin_key: "{{ lookup('env', 'ADMIN_KEY') }}"
+    indexer_cert: "{{ lookup('env', 'INDEXER_CERT') }}"
+    indexer_key: "{{ lookup('env', 'INDEXER_KEY') }}"
+    master_cert: "{{ lookup('env', 'MASTER_CERT') }}"
+    master_key: "{{ lookup('env', 'MASTER_KEY') }}"
+    worker_cert: "{{ lookup('env', 'WORKER_CERT') }}"
+    worker_key: "{{ lookup('env', 'WORKER_KEY') }}"
+    dashboard_cert: "{{ lookup('env', 'DASHBOARD_CERT') }}"
+    dashboard_key: "{{ lookup('env', 'DASHBOARD_KEY') }}"
 
   tasks:
     - name: Initialize Docker swarm
       ansible.builtin.shell: docker swarm init --advertise-addr 127.0.0.1 || true
-      
+
+    - name: Create Docker swarm secrets
+      ansible.builtin.shell: |
+        echo "$ROOT_CA_CERT"        | base64 -d | docker secret create root-ca.pem - || true
+        echo "$ROOT_CA_KEY"         | base64 -d | docker secret create root-ca.key - || true
+        echo "$ROOT_CA_MANAGER_CERT"| base64 -d | docker secret create root-ca-manager.pem - || true
+        echo "$ROOT_CA_MANAGER_KEY" | base64 -d | docker secret create root-ca-manager.key - || true
+        echo "$ADMIN_CERT"          | base64 -d | docker secret create admin.pem - || true
+        echo "$ADMIN_KEY"           | base64 -d | docker secret create admin-key.pem - || true
+        echo "$INDEXER_CERT"        | base64 -d | docker secret create wazuh1.indexer.pem - || true
+        echo "$INDEXER_KEY"         | base64 -d | docker secret create wazuh1.indexer-key.pem - || true
+        echo "$MASTER_CERT"         | base64 -d | docker secret create wazuh.master.pem - || true
+        echo "$MASTER_KEY"          | base64 -d | docker secret create wazuh.master-key.pem - || true
+        echo "$WORKER_CERT"         | base64 -d | docker secret create wazuh.worker.pem - || true
+        echo "$WORKER_KEY"          | base64 -d | docker secret create wazuh.worker-key.pem - || true
+        echo "$DASHBOARD_CERT"      | base64 -d | docker secret create wazuh.dashboard.pem - || true
+        echo "$DASHBOARD_KEY"       | base64 -d | docker secret create wazuh.dashboard-key.pem - || true
+
     - name: Remove old Wazuh stack if it exists
       ansible.builtin.shell: docker stack rm wazuh || true
 
@@ -22,7 +53,6 @@
       ansible.builtin.shell: |
         echo "Waiting for Wazuh services to be healthy..."
         until curl -k -s https://127.0.0.1:443/api >/dev/null; do
-              
           echo "Waiting..."
           sleep 10
         done
