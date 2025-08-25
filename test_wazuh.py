@@ -19,7 +19,7 @@ indexer_ip = os.getenv("INDEXER_IP", runner_ip)
 
 # Wazuh Manager API credentials
 manager_user = "wazuh-wui"
-manager_pass = os.getenv("WAZUH_MANAGER_PASSWORD")
+manager_pass = os.getenv("WAZUH_API_PASSWORD")
 
 # Indexer credentials (if basic auth)
 indexer_user ="admin"
