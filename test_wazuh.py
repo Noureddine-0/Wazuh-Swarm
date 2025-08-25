@@ -19,11 +19,11 @@ indexer_ip = os.getenv("INDEXER_IP", runner_ip)
 
 # Wazuh Manager API credentials
 manager_user = "wazuh-wui"
-manager_pass = os.getenv("MANAGER_PASSWORD")
+manager_pass = os.getenv("WAZUH_MANAGER_PASSWORD")
 
 # Indexer credentials (if basic auth)
 indexer_user ="admin"
-indexer_pass = os.getenv("INDEXER_PASSWORD") 
+indexer_pass = os.getenv("WAZUH_INDEXER_PASSWORD") 
 # --- Selenium test for Dashboard ---
 
 options = webdriver.ChromeOptions()
