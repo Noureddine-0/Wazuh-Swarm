@@ -192,8 +192,6 @@ secrets:
     external: true
   admin-key.pem:
     external: true
-  root-ca.pem:
-    external: true
   root-ca-manager.pem:
     external: true
   wazuh.master.pem:
