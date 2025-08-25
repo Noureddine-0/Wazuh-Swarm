@@ -93,7 +93,7 @@ services:
 
     secrets:
       - source: root-ca.pem
-        target: /etc/ssl/root-ca.pem
+        target: /usr/share/wazuh-indexer/certs/root-ca.pem
       - source: wazuh1.indexer-key.pem
         target: /usr/share/wazuh-indexer/certs/wazuh1.indexer.key
       - source: wazuh1.indexer.pem
