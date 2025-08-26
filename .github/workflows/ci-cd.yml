@@ -57,6 +57,8 @@ jobs:
       ROOT_CA_KEY: ${{ secrets.ROOT_CA_KEY }}
       ROOT_CA_MANAGER_CERT: ${{ secrets.ROOT_CA_MANAGER_CERT }}
       ROOT_CA_MANAGER_KEY: ${{ secrets.ROOT_CA_MANAGER_KEY }}
+      NGINX_CERT: ${{ secrets.NGINX_CERT }}
+      NGINX_KEY: ${{ secrets.NGINX_KEY }}
 
     steps:
       - name: Checkout repository
