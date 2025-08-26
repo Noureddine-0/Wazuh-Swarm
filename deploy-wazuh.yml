@@ -24,41 +24,52 @@
     nginx_key: "{{ lookup('env', 'NGINX_KEY') }}"
 
   tasks:
-    - name: Initialize Docker swarm
-      ansible.builtin.shell: docker swarm init --advertise-addr 127.0.0.1 || true
+    - name: Ensure Docker swarm is initialized
+      community.docker.docker_swarm:
+        state: present
+        advertise_addr: 127.0.0.1
 
-    - name: Create Docker swarm secrets
-      ansible.builtin.shell: |
-        echo "{{ root_ca_cert }}"        | base64 -d | docker secret create root-ca.pem - || true
-        echo "{{ root_ca_key }}"         | base64 -d | docker secret create root-ca.key - || true
-        echo "{{ root_ca_manager_cert }}"| base64 -d | docker secret create root-ca-manager.pem - || true
-        echo "{{ root_ca_manager_key }}" | base64 -d | docker secret create root-ca-manager.key - || true
-        echo "{{ admin_cert }}"          | base64 -d | docker secret create admin.pem - || true
-        echo "{{ admin_key }}"           | base64 -d | docker secret create admin-key.pem - || true
-        echo "{{ indexer_cert }}"        | base64 -d | docker secret create wazuh1.indexer.pem -  || true
-        echo "{{ indexer_key }}"         | base64 -d | docker secret create wazuh1.indexer-key.pem -  || true
-        echo "{{ master_cert }}"         | base64 -d | docker secret create wazuh.master.pem -  || true
-        echo "{{ master_key }}"          | base64 -d | docker secret create wazuh.master-key.pem -  || true
-        echo "{{ worker_cert }}"         | base64 -d | docker secret create wazuh.worker.pem -  || true
-        echo "{{ worker_key }}"          | base64 -d | docker secret create wazuh.worker-key.pem -  || true
-        echo "{{ dashboard_cert }}"      | base64 -d | docker secret create wazuh.dashboard.pem - || true
-        echo "{{ dashboard_key }}"       | base64 -d | docker secret create wazuh.dashboard-key.pem - || true
-        echo "{{ nginx_key }}"           | base64 -d | docker secret create nginx.key - || true
-        echo "{{ nginx_cert }}"          | base64 -d | docker secret create nginx.pem - || true
-
-
+    - name: Create Docker swarm secrets (certs & keys)
+      community.docker.docker_secret:
+        name: "{{ item.name }}"
+        data: "{{ item.data | b64decode }}"
+        state: present
+      loop:
+        - { name: "root-ca.pem", data: "{{ root_ca_cert }}" }
+        - { name: "root-ca.key", data: "{{ root_ca_key }}" }
+        - { name: "root-ca-manager.pem", data: "{{ root_ca_manager_cert }}" }
+        - { name: "root-ca-manager.key", data: "{{ root_ca_manager_key }}" }
+        - { name: "admin.pem", data: "{{ admin_cert }}" }
+        - { name: "admin-key.pem", data: "{{ admin_key }}" }
+        - { name: "wazuh1.indexer.pem", data: "{{ indexer_cert }}" }
+        - { name: "wazuh1.indexer-key.pem", data: "{{ indexer_key }}" }
+        - { name: "wazuh.master.pem", data: "{{ master_cert }}" }
+        - { name: "wazuh.master-key.pem", data: "{{ master_key }}" }
+        - { name: "wazuh.worker.pem", data: "{{ worker_cert }}" }
+        - { name: "wazuh.worker-key.pem", data: "{{ worker_key }}" }
+        - { name: "wazuh.dashboard.pem", data: "{{ dashboard_cert }}" }
+        - { name: "wazuh.dashboard-key.pem", data: "{{ dashboard_key }}" }
+        - { name: "nginx.pem", data: "{{ nginx_cert }}" }
+        - { name: "nginx.key", data: "{{ nginx_key }}" }
 
     - name: Remove old Wazuh stack if it exists
-      ansible.builtin.shell: docker stack rm wazuh || true
+      community.docker.docker_stack:
+        name: wazuh
+        state: absent
 
     - name: Deploy Wazuh stack
-      shell: docker stack deploy -c stack.yml wazuh
+      community.docker.docker_stack:
+        name: wazuh
+        state: present
+        compose:
+          - stack.yml
 
     - name: Wait for API to be ready
-      ansible.builtin.shell: |
-        echo "Waiting for Wazuh services to be healthy..."
-        until curl -k -s https://127.0.0.1:443/api >/dev/null; do
-          echo "Waiting..."
-          sleep 10
-        done
-        echo "Wazuh stack is ready"
+      ansible.builtin.uri:
+        url: "https://127.0.0.1:443/api"
+        method: GET
+        validate_certs: false
+      register: wazuh_api
+      retries: 30
+      delay: 10
+      until: wazuh_api.status == 200
