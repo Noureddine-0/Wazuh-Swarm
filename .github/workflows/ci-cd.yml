@@ -76,8 +76,23 @@ jobs:
         if: ${{ matrix.runner == 'ubuntu-latest' }}
         run: sudo apt-get update && sudo apt-get install -y ansible
 
+      - name: Set up Python venv for Ansible
+        run: |
+          python3 -m venv ansible-venv
+          source ansible-venv/bin/activate
+          pip install --upgrade pip setuptools wheel
+          pip install requests docker
+
       - name: Deploy to docker swarm via Ansible
         run: ansible-playbook deploy-wazuh.yml
+
+      - name: Cleanup Python venv
+        if: always()
+        run: |
+          deactivate || true   # only works if shell is still inside venv
+          rm -rf ansible-venv
+          rm -rf ~/.cache/pip
+
 
       - name: Waiting for Wazuh Dashboard to be ready
         run: |
