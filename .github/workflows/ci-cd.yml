@@ -34,7 +34,7 @@ jobs:
           source venv/bin/activate
           ansible-galaxy collection install community.docker -p ./collections
         env:
-          ANSIBLE_COLLECTIONS_PATHS: ./collections
+          ANSIBLE_COLLECTIONS_PATH: ./collections
 
       - name: Run yamllint
         run: |
@@ -45,6 +45,8 @@ jobs:
         run: |
           source venv/bin/activate
           ansible-lint playbooks/
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ./collections
 
       - name: Cleanup venv
         if: always()
