@@ -37,7 +37,7 @@ jobs:
       - name: Run ansible-lint
         run: |
           source ./ansible-lint-venv/bin/activate
-          ansible-lint deploy-wazuh.yml --nocolor
+          ansible-lint -c .ansible-lint.yml deploy-wazuh.yml --nocolor
 
       - name: Cleanup venv
         if: always()
