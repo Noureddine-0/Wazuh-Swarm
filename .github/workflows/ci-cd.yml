@@ -125,7 +125,7 @@ jobs:
           pip install requests docker jsondiff
 
       - name: Deploy to docker swarm via Ansible
-        run: ansible-playbook deploy-wazuh.yml
+        run: ansible-playbook playbooks/deploy-wazuh.yml
 
       - name: Cleanup Python venv
         if: always()
