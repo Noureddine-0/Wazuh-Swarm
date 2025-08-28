@@ -2,8 +2,7 @@
 
 project_dir: .
 exclude_paths:
-  - "!playbooks/"    # only include playbooks dir
-  - ".*"
+  - collections/
 
 skip_list:
   - '204'     # Skip errors about using latest tag if you want
