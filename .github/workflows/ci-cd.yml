@@ -44,7 +44,7 @@ jobs:
       - name: Run ansible-lint
         run: |
           source venv/bin/activate
-          ansible-lint -c .ansible-lint.yml deploy-wazuh.yml
+          ansible-lint -v -c .ansible-lint.yml deploy-wazuh.yml
         env:
           ANSIBLE_COLLECTIONS_PATHS: ./collections
 
