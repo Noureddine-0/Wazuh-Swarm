@@ -10,6 +10,7 @@ ignore: |
 
 
 rules:
+  comments-indentation: false
   comments:
     min-spaces-from-content: 1
   braces:
