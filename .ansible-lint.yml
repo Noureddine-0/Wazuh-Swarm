@@ -1,9 +1,4 @@
 ---
-
-project_dir: .
-exclude_paths:
-  - collections/
-
 skip_list:
   - '204'     # Skip errors about using latest tag if you want
   - '106'     # Skip warnings about missing 'become'

@@ -4,7 +4,8 @@ extends: default
 ignore: |
   build-docker-images/
   config/
-  .venv/
+  venv/
+  collections/
   ansible-lint-venv/
   deploy-wazuh.yml
 
