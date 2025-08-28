@@ -32,7 +32,9 @@ jobs:
       - name: Install required Ansible collections
         run: |
           source venv/bin/activate
-          ansible-galaxy collection install community.docker
+          ansible-galaxy collection install community.docker -p ./collections
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ./collections
 
       - name: Run yamllint
         run: |
@@ -43,6 +45,8 @@ jobs:
         run: |
           source venv/bin/activate
           ansible-lint -c .ansible-lint.yml deploy-wazuh.yml
+        env:
+          ANSIBLE_COLLECTIONS_PATHS: ./collections
 
       - name: Cleanup venv
         if: always()
