@@ -29,6 +29,11 @@ jobs:
           pip install --upgrade pip
           pip install yamllint ansible-lint
 
+      - name: Install required Ansible collections
+        run: |
+          source venv/bin/activate
+          ansible-galaxy collection install community.docker
+
       - name: Run yamllint
         run: |
           source venv/bin/activate
@@ -37,7 +42,6 @@ jobs:
       - name: Run ansible-lint
         run: |
           source venv/bin/activate
-          ansible-galaxy collection install community.docker
           ansible-lint -c .ansible-lint.yml deploy-wazuh.yml
 
       - name: Cleanup venv
