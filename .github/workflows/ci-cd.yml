@@ -36,13 +36,6 @@ jobs:
         env:
           ANSIBLE_COLLECTIONS_PATHS: ./collections
 
-      - name: Debug Ansible collections
-        run: |
-          ls -R ./collections
-          ansible-galaxy collection list
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ./collections
-
       - name: Run yamllint
         run: |
           source venv/bin/activate
@@ -51,9 +44,7 @@ jobs:
       - name: Run ansible-lint
         run: |
           source venv/bin/activate
-          ansible-lint -v -c .ansible-lint.yml deploy-wazuh.yml
-        env:
-          ANSIBLE_COLLECTIONS_PATHS: ./collections
+          ansible-lint deploy-wazuh.yml
 
       - name: Cleanup venv
         if: always()
