@@ -68,11 +68,10 @@
 
     - name: Waiting for Wazuh services
       ansible.builtin.uri:
-        url: "https://127.0.0.1:443/api"
+        url: "https://127.0.0.1:443"
         method: GET
         validate_certs: false
-        status_code: 401
       register: wazuh_api
       retries: 30
       delay: 10
-      until: wazuh_api.status == 401
+      until: wazuh_api.status == 200
