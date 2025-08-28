@@ -1,0 +1,7 @@
+---
+skip_list:
+  - '204'     # Skip errors about using latest tag if you want
+  - '106'     # Skip warnings about missing 'become'
+warn_list:
+  - experimental
+parseable: true

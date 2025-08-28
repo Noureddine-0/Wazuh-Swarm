@@ -1,10 +1,11 @@
+---
 - name: Deploy Wazuh stack via Ansible
   hosts: localhost
   connection: local
   gather_facts: false
   vars:
     ansible_python_interpreter: "{{ playbook_dir }}/ansible-venv/bin/python"
-    
+
     wazuh_api_password: "{{ lookup('env', 'WAZUH_API_PASSWORD') }}"
     wazuh_indexer_password: "{{ lookup('env', 'WAZUH_INDEXER_PASSWORD') }}"
     wazuh_dashboard_password: "{{ lookup('env', 'WAZUH_DASHBOARD_PASSWORD') }}"
