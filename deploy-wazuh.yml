@@ -66,7 +66,7 @@
         compose:
           - stack.yml
 
-    - name: Wait for API to be ready
+    - name: Waiting for Wazuh services
       ansible.builtin.uri:
         url: "https://127.0.0.1:443/api"
         method: GET
@@ -74,4 +74,4 @@
       register: wazuh_api
       retries: 30
       delay: 10
-      until: wazuh_api.status == 200
+      until: wazuh_api.status == 401
