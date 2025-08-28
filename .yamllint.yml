@@ -5,7 +5,7 @@ ignore: |
   build-docker-images/
   config/
   .venv/
-  .ansible-lint-venv/
+  ansible-lint-venv/
   deploy-wazuh.yml
 
 
