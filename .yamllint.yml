@@ -4,6 +4,7 @@ extends: default
 ignore: |
   build-docker-images/
   config/
+  .venv/
   deploy-wazuh.yml
 
 
