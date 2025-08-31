@@ -65,7 +65,7 @@
         name: wazuh
         state: present
         compose:
-          - "{{ playbook_dir }}/../stack.yml"
+          - "{{ playbook_dir }}/../stack/wazuh-stack.yml"
 
     - name: Waiting for Wazuh services
       ansible.builtin.uri:

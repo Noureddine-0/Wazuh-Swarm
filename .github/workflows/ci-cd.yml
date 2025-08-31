@@ -73,8 +73,8 @@ jobs:
 
       - name: Build wazuh images
         run: |
-          chmod +x build-docker-images/build-images.sh
-          ./build-docker-images/build-images.sh
+          chmod +x docker/build-images.sh
+          ./docker/build-images.sh
 
   deploy-test:
     needs: build
