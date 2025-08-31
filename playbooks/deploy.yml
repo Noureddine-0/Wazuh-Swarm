@@ -60,12 +60,23 @@
         name: wazuh
         state: absent
 
-    - name: Deploy Wazuh stack
-      community.docker.docker_stack:
-        name: wazuh
-        state: present
-        compose:
-          - "{{ playbook_dir }}/../stack/wazuh-stack.yml"
+    - name: Deploy Wazuh stack safely with rollback
+      block:
+        - name: Deploy or update Wazuh stack
+          community.docker.docker_stack:
+            name: wazuh
+            state: present
+            compose:
+              - "{{ playbook_dir }}/../stack/wazuh-stack.yml"
+            prune: yes
+      rescue:
+        - name: Rollback in case of failure
+          ansible.builtin.debug:
+            msg: "Deployment failed, rolling back stack"
+        - name: Remove partial/failed stack
+          community.docker.docker_stack:
+            name: wazuh
+            state: absent
 
     - name: Waiting for Wazuh services
       ansible.builtin.uri:

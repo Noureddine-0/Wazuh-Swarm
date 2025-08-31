@@ -45,6 +45,7 @@ jobs:
         run: |
           source venv/bin/activate
           ansible-lint playbooks/deploy.yml
+          ansible-lint playbooks/teardown.yml
         env:
           ANSIBLE_COLLECTIONS_PATH: ./collections
 
