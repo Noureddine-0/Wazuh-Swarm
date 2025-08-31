@@ -121,8 +121,8 @@ jobs:
 
       - name: Set up Python venv for Ansible
         run: |
-          python3 -m venv ansible-venv
-          source ansible-venv/bin/activate
+          python3 -m venv playbooks/ansible-venv
+          source plybooks/ansible-venv/bin/activate
           pip install --upgrade pip setuptools wheel
           pip install requests docker jsondiff
 
@@ -133,8 +133,7 @@ jobs:
         if: always()
         run: |
           deactivate || true   # only works if shell is still inside venv
-          rm -rf ansible-venv
-          rm -rf ~/.cache/pip
+          rm -rf playbooks/ansible-venv
 
 
       - name: Waiting for Wazuh Dashboard to be ready
