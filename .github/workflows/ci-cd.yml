@@ -170,4 +170,3 @@ jobs:
           source selenium-env/bin/activate
           python3 tests/selenium/selenium_test.py
           python3 tests/api/health_check.py
-
