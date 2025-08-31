@@ -127,7 +127,7 @@ jobs:
           pip install requests docker jsondiff
 
       - name: Deploy to docker swarm via Ansible
-        run: ansible-playbook playbooks/deploy-wazuh.yml
+        run: ansible-playbook playbooks/deploy.yml
 
       - name: Cleanup Python venv
         if: always()
@@ -165,7 +165,9 @@ jobs:
           pip install --upgrade pip
           pip install selenium==4.35.0 webdriver-manager==4.0.2
 
-      - name: Run Wazuh dashboard Selenium test
+      - name: Run tests
         run: |
           source selenium-env/bin/activate
-          python3 test_wazuh.py
+          python3 tests/selenium/selenium_test.py
+          python3 tests/api/health_check.py
+
