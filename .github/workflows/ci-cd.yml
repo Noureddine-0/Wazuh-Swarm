@@ -122,7 +122,7 @@ jobs:
       - name: Set up Python venv for Ansible
         run: |
           python3 -m venv playbooks/ansible-venv
-          source plybooks/ansible-venv/bin/activate
+          source playbooks/ansible-venv/bin/activate
           pip install --upgrade pip setuptools wheel
           pip install requests docker jsondiff
 
