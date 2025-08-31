@@ -77,6 +77,9 @@
           community.docker.docker_stack:
             name: wazuh
             state: absent
+        - name: Fail the playbook after rollback
+          ansible.builtin.fail:
+            msg: "Wazuh stack deployment failed. Rollback complete."
 
     - name: Waiting for Wazuh services
       ansible.builtin.uri:

@@ -55,3 +55,4 @@
     - name: Optionally leave Docker swarm clean
       community.docker.docker_swarm:
         state: absent
+        force: true
