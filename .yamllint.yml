@@ -8,6 +8,7 @@ ignore: |
   collections/
   ansible-lint-venv/
   deploy.yml
+  teardown.yml
 
 
 rules:

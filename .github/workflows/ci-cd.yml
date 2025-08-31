@@ -73,8 +73,8 @@ jobs:
 
       - name: Build wazuh images
         run: |
-          chmod +x docker/build-images.sh
-          ./docker/build-images.sh
+          chmod +x build-docker-images/build-images.sh
+          ./build-docker-images/build-images.sh
 
   deploy-test:
     needs: build
@@ -132,7 +132,6 @@ jobs:
       - name: Cleanup Python venv
         if: always()
         run: |
-          deactivate || true   # only works if shell is still inside venv
           rm -rf playbooks/ansible-venv
 
 
@@ -169,3 +168,6 @@ jobs:
           source selenium-env/bin/activate
           python3 tests/selenium/selenium_test.py
           python3 tests/api/health_check.py
+
+      - name: Run teardown
+        run: ansible-playbook playbooks/teardown.yml
