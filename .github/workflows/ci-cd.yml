@@ -130,12 +130,6 @@ jobs:
       - name: Deploy to docker swarm via Ansible
         run: ansible-playbook playbooks/deploy.yml
 
-      - name: Cleanup Python venv
-        if: always()
-        run: |
-          rm -rf playbooks/ansible-venv
-
-
       - name: Waiting for Wazuh Dashboard to be ready
         run: |
           echo "Waiting for Wazuh dashboard at https://$RUNNER_IP:443/app/login..."
@@ -172,3 +166,8 @@ jobs:
 
       - name: Run teardown
         run: ansible-playbook playbooks/teardown.yml
+
+      - name: Cleanup Python venv
+        if: always()
+        run: |
+          rm -rf playbooks/ansible-venv
