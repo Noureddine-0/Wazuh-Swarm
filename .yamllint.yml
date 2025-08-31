@@ -7,7 +7,7 @@ ignore: |
   venv/
   collections/
   ansible-lint-venv/
-  deploy-wazuh.yml
+  deploy.yml
 
 
 rules:
