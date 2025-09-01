@@ -85,6 +85,7 @@ The screenshot below confirms that the Wazuh dashboard is up and running
 	</rule>
 </group>
 ```
+
 We created this rule to detect successful SSH logins that occur after multiple failed attempts from non-existent users. By correlating prior failed login attempts (rule 5712) with a current successful login (rule 5715) from the same source IP, this rule helps identify potential brute-force attacks that ultimately succeed. Assigned a high alert level of 12 and mapped to MITRE ATT&CK technique T1110, it ensures that such suspicious authentication events are promptly flagged for security monitoring.
 
 The following image shows the process of triggering the rule by trying multiple logins with non-existent user,then a successful login
