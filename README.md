@@ -13,7 +13,7 @@
 
 - [SSH rule](#SSH-rule)
 
-- [CI/CD Pipeline](#CI/CD-Pipeline)
+- [CI/CD Pipeline](#CICD-Pipeline)
 
 - [Trivy Scans](#Trivy-Scans)
 
