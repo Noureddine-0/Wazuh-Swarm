@@ -6,23 +6,6 @@
   vars:
     ansible_python_interpreter: "{{ playbook_dir }}/ansible-venv/bin/python"
 
-    # Secrets from environment
-    root_ca_cert: "{{ lookup('env', 'ROOT_CA_CERT') }}"
-    root_ca_key: "{{ lookup('env', 'ROOT_CA_KEY') }}"
-    root_ca_manager_cert: "{{ lookup('env', 'ROOT_CA_MANAGER_CERT') }}"
-    root_ca_manager_key: "{{ lookup('env', 'ROOT_CA_MANAGER_KEY') }}"
-    admin_cert: "{{ lookup('env', 'ADMIN_CERT') }}"
-    admin_key: "{{ lookup('env', 'ADMIN_KEY') }}"
-    indexer_cert: "{{ lookup('env', 'INDEXER_CERT') }}"
-    indexer_key: "{{ lookup('env', 'INDEXER_KEY') }}"
-    master_cert: "{{ lookup('env', 'MASTER_CERT') }}"
-    master_key: "{{ lookup('env', 'MASTER_KEY') }}"
-    worker_cert: "{{ lookup('env', 'WORKER_CERT') }}"
-    worker_key: "{{ lookup('env', 'WORKER_KEY') }}"
-    dashboard_cert: "{{ lookup('env', 'DASHBOARD_CERT') }}"
-    dashboard_key: "{{ lookup('env', 'DASHBOARD_KEY') }}"
-    nginx_cert: "{{ lookup('env', 'NGINX_CERT') }}"
-    nginx_key: "{{ lookup('env', 'NGINX_KEY') }}"
 
   tasks:
     - name: Remove Wazuh stack
