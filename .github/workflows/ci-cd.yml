@@ -76,6 +76,32 @@ jobs:
         run: |
           chmod +x build-docker-images/build-images.sh
           ./build-docker-images/build-images.sh
+      - name: Scan Wazuh Manager image with Trivy
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: wazuh/wazuh-manager:4.12.0
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: 0
+          scanners: vuln
+
+      - name: Scan Wazuh Indexer image with Trivy
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: wazuh/wazuh-indexer:4.12.0
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: 0
+          scanners: vuln
+
+      - name: Scan Wazuh Dashboard image with Trivy
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+          image-ref: wazuh/wazuh-dashboard:4.12.0
+          format: table
+          severity: CRITICAL,HIGH
+          exit-code: 0
+          scanners: vuln
 
   deploy-test:
     needs: build
@@ -164,3 +190,11 @@ jobs:
           source selenium-env/bin/activate
           python3 tests/selenium/selenium_test.py
           python3 tests/api/health_check.py
+      - name: Run teardown
+        run: ansible-playbook playbooks/teardown.yml
+
+      - name: Cleanup Python venv
+        if: always()
+        run: |
+          rm -rf playbooks/ansible-venv
+
