@@ -1,21 +1,21 @@
 ## Table of Contents
-- [Architecture](##Architecture)
+- [Architecture](#Architecture)
 
-- [Prerequisites](##Prerequisites)
+- [Prerequisites](#Prerequisites)
 
-- [How to run](##How-to-run)
+- [How to run](#How-to-run)
 
-- [Secrets/TLS](##Secrets/TLS)
+- [Secrets/TLS](#Secrets/TLS)
 
-- [Rollback/Recovery](##Rollback/Recovery)
+- [Rollback/Recovery](#Rollback/Recovery)
 
-- [Wazuh Dashboard](##Wazuh-Dashboard)
+- [Wazuh Dashboard](#Wazuh-Dashboard)
 
-- [SSH rule](##SSH-rule)
+- [SSH rule](#SSH-rule)
 
-- [CI/CD Pipeline](##CI/CD-Pipeline)
+- [CI/CD Pipeline](#CI/CD-Pipeline)
 
-- [Trivy Scans](##Trivy-Scans)
+- [Trivy Scans](#Trivy-Scans)
 
 
 
