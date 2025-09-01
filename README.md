@@ -5,9 +5,9 @@
 
 - [How to run](#How-to-run)
 
-- [Secrets/TLS](#Secrets/TLS)
+- [Secrets/TLS](#SecretsTLS)
 
-- [Rollback/Recovery](#Rollback/Recovery)
+- [Rollback/Recovery](#RollbackRecovery)
 
 - [Wazuh Dashboard](#Wazuh-Dashboard)
 
