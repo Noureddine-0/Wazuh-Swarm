@@ -72,6 +72,7 @@ The screenshot below confirms that the Wazuh dashboard is up and running
 ![Dashboard](/images/Dashboard.jpg)
 
 ## SSH  rule
+
 ```xml
 <group name="local,ssh,brute_force,successful_brute_force">
 	<rule id="100001" level="12">
